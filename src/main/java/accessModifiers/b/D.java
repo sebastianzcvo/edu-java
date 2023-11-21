@@ -1,6 +1,6 @@
-package packages.b;
+package accessModifiers.b;
 
-import packages.a.A;
+import accessModifiers.a.A;
 
 public class D {
     void f() {
