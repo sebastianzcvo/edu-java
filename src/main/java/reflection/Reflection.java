@@ -13,11 +13,6 @@ public class Reflection {
         System.out.println(x.getClass().getModule().getName());
         System.out.println("--------------------");
 
-        MyClassLoader myClassLoader = new MyClassLoader("C:\\Users\\sbszc\\workspace");
-        Class<?> switches = myClassLoader.loadClass("switches.Switches2");
-        System.out.println(switches.getClassLoader());
-        System.out.println("--------------------");
-
         Class<?> clazzForName = Class.forName("reflection.Reflection$MyClass");
         System.out.println(clazzForName.getClassLoader());
         System.out.println("--------------------");
