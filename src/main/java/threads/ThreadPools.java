@@ -13,6 +13,10 @@ public class ThreadPools {
         singleThreadScheduledExecutor();
 
         customThreadPoolExecutor();
+
+//        pool.shutdown(); // Initiates an orderly shutdown in which previously submitted tasks are executed, but no new tasks will be accepted. This method does not wait for previously submitted tasks to complete execution. Use awaitTermination to do that.
+//        pool.shutdownNow(); // Attempts to stop all actively executing tasks, halts the processing of waiting tasks, and returns a list of the tasks that were awaiting execution. This method does not wait for actively executing tasks to terminate. Use awaitTermination to do that.
+//        boolean terminatedBeforeTimeout = pool.awaitTermination(10, TimeUnit.SECONDS); // Blocks until all tasks have completed execution after a shutdown request, or the timeout occurs, or the current thread is interrupted, whichever happens first.
     }
 
     private static void singleThreadedExecutor() {
