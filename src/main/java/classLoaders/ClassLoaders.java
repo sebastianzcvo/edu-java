@@ -1,12 +1,19 @@
-package reflection;
+package classLoaders;
 
 import java.io.*;
 
-public class MyClassLoader extends ClassLoader {
+public class ClassLoaders extends ClassLoader {
+
+    public static void main(String[] args) throws ClassNotFoundException {
+        ClassLoaders myClassLoader = new ClassLoaders("C:\\Users\\sbszc\\workspace\\edu-java");
+        Class<?> switches = myClassLoader.loadClass("classLoaders.ClassToLoad");
+        System.out.println(switches.getClassLoader());
+        System.out.println("--------------------");
+    }
 
     private final String classpath;
 
-    public MyClassLoader(String classpath) {
+    public ClassLoaders(String classpath) {
         this.classpath = classpath;
     }
 
