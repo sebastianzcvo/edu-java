@@ -2,7 +2,7 @@ package clonables;
 
 import java.util.Objects;
 
-public class Main {
+public class Clonables {
     public static void main(String[] args) {
         Person person1 = new Person(1, "name1");
         Person person2 = person1.clone();
