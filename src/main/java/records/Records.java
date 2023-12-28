@@ -23,9 +23,10 @@ record Person(String name, String lastname) implements Serializable { // extends
 //        this.name = name;
 //        this.lastname = lastname;
 //    }
-    public Person { // generated canonical constructor can be customized, following this compacted syntax without parameters
+    public Person { // generated canonical constructor can be customized using a compact constructor. Think of it as a filter of post-processor before the cannonical constructor is called, thus 'this' is not accesible yet in the lifecycle of the object
         Objects.requireNonNull(name);
         Objects.requireNonNull(lastname);
+        // cannonical constructor is invoked here
     }
 
     public String name(int rep) { // getters and other generated methods can be overriden and overloaded
