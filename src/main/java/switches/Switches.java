@@ -24,13 +24,13 @@ public class Switches {
                 break;
         }
 
-        String result = switch (myString) { // switch expressions are available since java 13
+        String result = switch (myString) { // switch expressions are available since java 14
             case case1 -> "Compatible with 'MYSTRING'";
             case "myString", "myString2" -> {
                 yield "Compatible with 'myString'"; // code blocks require yield keyword
             }
             default ->
-                    "not compatibility found"; // switch expressions have to cover all possible values or contain a default branch
+                    "not compatibility found"; // switch expressions must be exhaustive: have to cover all possible values or contain a default branch
         };
         System.out.println(result);
 

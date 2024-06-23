@@ -68,6 +68,7 @@ public class StreamOperations {
 //                .flatMap(e -> e.stream())
                 .flatMap(List::stream)
                 .toList();
+        System.out.printf("flatMap: %s%n", flatMapList);
     }
 
     private static void reduce() {
@@ -158,6 +159,11 @@ public class StreamOperations {
                 .mapToInt(e -> e)
                 .sum();
         System.out.println("sum = " + sum);
+
+        int first = numbers.stream()
+                .findFirst()
+                .orElse(-1);
+        System.out.println("first = " + first);
     }
 
     private static void collectJoining() {
@@ -232,7 +238,7 @@ public class StreamOperations {
         Map<Integer, List<Person>> collectGroupingBy1 = people.stream()
                 .collect(Collectors.groupingBy(
                         e -> e.age/*, // classifier function
-                        Collectors.toList())*/)); // downstream collector (Collectors.toList() by default)
+                        Collectors.toList()*/)); // downstream collector (Collectors.toList() by default)
         System.out.println("collectGroupingBy1 = " + collectGroupingBy1);
 
         Map<Integer, List<String>> collectGroupingBy2 = people.stream()

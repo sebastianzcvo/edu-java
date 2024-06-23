@@ -30,6 +30,7 @@ public class Regex {
         }
         System.out.println("--------------");
         p = Pattern.compile("(.*)\\s(.*)\\s(.*)");
+        m = p.matcher("Ge EkI fic");
         if (m.matches()){
             System.out.println(m.groupCount());
             System.out.println(m.group());

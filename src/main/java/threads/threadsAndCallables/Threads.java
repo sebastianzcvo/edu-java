@@ -17,47 +17,48 @@ import java.util.concurrent.Future;
 // parallelism: multiple threads executing at the same time. Each in a different processor/core
 // concurrency: multiple threads executing but only one at the same time. It's common on synchronized access to shared resources, or when multiple threads are executed by the same processor
 public class Threads {
+
+    // 2 basic forms of creation:
+    // - implementing Runnable and pass it to Thread constructor
+    // - extending Thread class
+    // 3 basic forms of execution:
+    // - thread.start()
+    // - pool.execute(runnable)
+    // - pool.submit(runnable), or pool.submit(runnable, return)
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        Thread t1 = new Thread(() -> System.out.println("implementing Runnable with lambda"));
+
+        Thread t2 = new Thread(new MyRunnable());
+
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("implementing Runnable with anonymous local class");
+            }
+        });
+
+        Thread t4 = new MyThread();
+
+        Thread t5 = new Thread(){
+            @Override
+            public void run() {
+                System.out.println("implementing Thread with anonymous local class");
+            }
+        };
+
+        t1.start();
+        t2.start();
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        pool.execute(t3);
+        Future<?> f4 = pool.submit(t4);
+        Future<Boolean> f5 = pool.submit(t5, true);
+        pool.shutdown(); // required to exit the application
+
+        System.out.println(f4.get()); // blocks and prints null
+        System.out.println(f5.get()); // blocks and prints true
+    }
+
     static class MyRunnable implements Runnable {
-        // 2 basic forms of creation:
-        // - implementing Runnable and pass it to Thread constructor
-        // - extending Thread class
-        // 3 basic forms of execution:
-        // - thread.start()
-        // - pool.execute(runnable)
-        // - pool.submit(runnable), or pool.submit(runnable, return)
-        public static void main(String[] args) throws ExecutionException, InterruptedException {
-            Thread t1 = new Thread(() -> System.out.println("implementing Runnable with lambda"));
-
-            Thread t2 = new Thread(new MyRunnable());
-
-            Thread t3 = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("implementing Runnable with anonymous local class");
-                }
-            });
-
-            Thread t4 = new MyThread();
-
-            Thread t5 = new Thread(){
-                @Override
-                public void run() {
-                    System.out.println("implementing Thread with anonymous local class");
-                }
-            };
-
-            t1.start();
-            t2.start();
-            ExecutorService pool = Executors.newSingleThreadExecutor();
-            pool.execute(t3);
-            Future<?> f4 = pool.submit(t4);
-            Future<Boolean> f5 = pool.submit(t5, true);
-            pool.shutdown(); // required to exit the application
-
-            System.out.println(f4.get()); // blocks and prints null
-            System.out.println(f5.get()); // blocks and prints true
-        }
-
         @Override
         public void run() {
             System.out.println("implementing Runnable");

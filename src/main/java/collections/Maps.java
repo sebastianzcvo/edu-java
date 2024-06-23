@@ -7,7 +7,7 @@ public class Maps {
         map(); // Key-value elements with unique key. equals() and hashCode() to ensure uniqueness.
 
         hashMap(); // Unordered. Implements a linked list. Nullable key-value.
-        linkedHashMap(); // // Ordered by insertion. Implements a double-linked list. Nullable key-value.
+        linkedHashMap(); // Ordered by insertion. Implements a double-linked list. Nullable key-value.
         treeMap(); // Ordered by value using compareTo(). Implements a binary tree. Non-nullable key.
         hashTable(); // Unordered. Thread safe. Implements a linked list. Non-nullable key-value.
     }

@@ -17,6 +17,11 @@ class SubType extends SuperType {
         if (subType instanceof SubType castedSubType) {
             System.out.println(castedSubType.prop);
         }
+
+        SubType tmp = null;
+        if (tmp instanceof SubType) {
+            System.out.println("HIIIIIIIIIIIIIIIIA");
+        }
     }
 
     static void checkType(Object object) {
