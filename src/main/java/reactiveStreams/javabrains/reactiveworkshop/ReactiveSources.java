@@ -42,4 +42,3 @@ public class ReactiveSources {
         ).delayElements(Duration.ofSeconds(1));
     }
 }
-

@@ -23,7 +23,4 @@ public class StreamSources {
                 new User(6, "Gareth", "Bale")
         );
     }
-
-
 }
-

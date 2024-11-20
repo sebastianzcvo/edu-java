@@ -1,6 +1,7 @@
 package reactiveStreams;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
+import reactiveStreams.javabrains.reactiveworkshop.User;
 import reactor.core.publisher.Mono;
 
 // Reactive Streams is an API introduced in java 9. It's just the specification, there are several implementations like Reactor or RxJava
@@ -21,11 +22,4 @@ public class ReactiveStreams {
                 .doOnNext(System.out::println)
                 .subscribe();
     }
-}
-
-record User(
-        int id,
-        String name,
-        String lastname
-) {
 }
