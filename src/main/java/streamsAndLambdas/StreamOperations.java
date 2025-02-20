@@ -1,6 +1,12 @@
 package streamsAndLambdas;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
@@ -23,6 +29,7 @@ public class StreamOperations {
         collectToMap();
         collectMapping();
         collectGroupBy();
+        collectGroupByWithSum();
     }
 
     private static void filter() {
@@ -95,9 +102,9 @@ public class StreamOperations {
         System.out.printf("reduce4: %s%n", reduce4);
 
         List<Item> items = List.of(
-                new Item(1, 1),
-                new Item(2, 2),
-                new Item(3, 3));
+                new Item(1L, 1),
+                new Item(2L, 2),
+                new Item(3L, 3));
         int reduce5 = items.stream()
 //                .reduce(0, (total, item) -> total + item.price()); // won't compile. for 2 args expects (T identity, BinaryOperator<T> accumulator)
                 .reduce(0, (total, item) -> total + item.price, Integer::sum); // API Note: Many reductions using this form can be represented more simply by an explicit combination of map and reduce operations. The accumulator function acts as a fused mapper and accumulator, which can sometimes be more efficient than separate mapping and reduction, such as when knowing the previously reduced value allows you to avoid some computation.
@@ -121,9 +128,9 @@ public class StreamOperations {
 
     private static void totalPrice() {
         List<Order> orders = List.of(
-                new Order(1, List.of(new Item(1, 10), new Item(2, 10))),
-                new Order(2, List.of(new Item(3, 10), new Item(4, 10))),
-                new Order(3, List.of(new Item(5, 10), new Item(6, 10))));
+                new Order(1, List.of(new Item(1L, 10), new Item(2L, 10))),
+                new Order(2, List.of(new Item(3L, 10), new Item(4L, 10))),
+                new Order(3, List.of(new Item(5L, 10), new Item(6L, 10))));
 
         int totalPrice1 = orders.stream()
                 .flatMap(order -> order.items().stream())
@@ -250,10 +257,29 @@ public class StreamOperations {
         System.out.println("collectGroupingBy2 = " + collectGroupingBy2);
     }
 
+    private static void collectGroupByWithSum() {
+        List<Item> items = List.of(
+                new Item(1L, 10),
+                new Item(2L, 20),
+                new Item(1L, 30),
+                new Item(2L, 40),
+                new Item(null, 30),
+                new Item(2L, null)
+        );
+
+        Map<Long, Integer> collectGroupingByWithSum = items.stream()
+                .filter(e -> e.price != null)
+                .filter(e -> e.id != null)
+                .collect(Collectors.groupingBy(
+                        Item::id,
+                        Collectors.summingInt(Item::price)));
+        System.out.println("collectGroupingByWithSum = " + collectGroupingByWithSum);
+    }
+
     record Order(long id, List<Item> items) {
     }
 
-    record Item(long id, int price) {
+    record Item(Long id, Integer price) {
     }
 
     record Person(String id, String name, int age) {
