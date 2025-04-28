@@ -5,7 +5,7 @@ import java.util.Optional;
 public class Optionals {
     public static void main(String[] args) {
         Optional<String> optional = find();
-
+//
         optional.get(); // ¡forGET!, same as orElseThrow()
         optional.orElseThrow(); // but at least orElseThrow() tells you the potential NoSuchElementException
 
