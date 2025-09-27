@@ -1,8 +1,8 @@
 package accessModifiers.a;
 
 public class A {
-    static public String publicProp = "";
-    static protected String protectedProp = "";
-    static String defaultProp = "";
     static private String privateProp = "";
+    static String defaultProp = ""; // package private
+    static protected String protectedProp = ""; // default + subclasses
+    static public String publicProp = "";
 }
