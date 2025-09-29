@@ -7,11 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ArrayToList {
     public static void main(String[] args) {
-        arraysAsList(); // fixed-size and mutable list: modifications are shared bidirectionally (array<->list). Think of it as a view or a wrapper, not as a copy
+        asList(); // mutable, fixed-size list. Modifications are shared bidirectionally (array<->list). Think of it as a view or a wrapper, not as a copy
         listOf(); // immutable list. Think of it as a copy
     }
 
-    public static void arraysAsList() {
+    public static void asList() {
+        System.out.println("asList -----------------");
         Integer[] arr = {1, 2, 3};
         List<Integer> list = Arrays.asList(arr);
 
@@ -26,6 +27,7 @@ public class ArrayToList {
     }
 
     private static void listOf() {
+        System.out.println("listOf -----------------");
         Integer[] arr = {1, 2, 3};
         List<Integer> list = List.of(arr);
 
