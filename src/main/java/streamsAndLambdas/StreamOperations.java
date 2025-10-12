@@ -218,8 +218,8 @@ public class StreamOperations {
 //                .collect(Collectors.toUnmodifiableMap(e -> e.id, e -> e.name + "-" + e.age));
 //                .collect(Collectors.toConcurrentMap(e -> e.id, e -> e.name + "-" + e.age));
                 .collect(Collectors.toMap(
-                        e -> e.id, // key mapper
-                        e -> e.name + "-" + e.age)); // value mapper
+                        e -> e.id, // key mapper is required
+                        e -> e.name + "-" + e.age)); // value mapper is required
         System.out.println("collectToMap = " + collectToMap);
     }
 
