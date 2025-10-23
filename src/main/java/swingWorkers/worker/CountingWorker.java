@@ -6,10 +6,12 @@ import java.util.function.Consumer;
 public class CountingWorker extends ControllableWorker<Integer, Integer> {
 
     private final WorkerManager workerManager;
-    private final Consumer<String> publishCallback;
+    private final Consumer<Integer> publishCallback;
     private final Consumer<Boolean> doneCallback;
 
-    public CountingWorker(WorkerManager workerManager, Consumer<String> publishCallback, Consumer<Boolean> doneCallback) {
+    private final int MAX_COUNT = 5;
+
+    public CountingWorker(WorkerManager workerManager, Consumer<Integer> publishCallback, Consumer<Boolean> doneCallback) {
         this.workerManager = workerManager;
         this.publishCallback = publishCallback;
         this.doneCallback = doneCallback;
@@ -17,9 +19,10 @@ public class CountingWorker extends ControllableWorker<Integer, Integer> {
 
     @Override
     protected Integer doInBackground() throws Exception {
-        workerManager.pauseExcept(this.getId());
-        for (int i = 1; i <= 10; i++) {
-            if (shouldStop() || i == 10) {
+        if (!workerManager.haltExcept(getId())) return 0;
+
+        for (int i = 1; i <= MAX_COUNT; i++) {
+            if (shouldStop() || i == MAX_COUNT) {
                 return i;
             }
             publish(i);
@@ -30,16 +33,19 @@ public class CountingWorker extends ControllableWorker<Integer, Integer> {
 
     @Override
     protected void process(List<Integer> chunks) {
+        if (shouldStop() || isPaused()) return;
         for (Integer count : chunks) {
-            publishCallback.accept("Count: " + count);
+            publishCallback.accept(count);
         }
     }
 
     @Override
     protected void done() {
+        if (shouldStop()) return;
+        workerManager.resume();
         try {
             Integer result = get();
-            doneCallback.accept(result == 10);
+            doneCallback.accept(result == MAX_COUNT);
         } catch (Exception ex) {
             ex.getCause().printStackTrace();
             doneCallback.accept(false);

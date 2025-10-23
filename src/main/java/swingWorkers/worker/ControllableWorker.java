@@ -57,4 +57,7 @@ public abstract class ControllableWorker<T, V> extends SwingWorker<T, V> {
         return stopped || isCancelled();
     }
 
+    protected boolean isPaused() {
+        return paused;
+    }
 }

@@ -1,5 +1,6 @@
 package swingWorkers.ui;
 
+import swingWorkers.device.RFDevice;
 import swingWorkers.device.RFDeviceMech;
 import swingWorkers.device.RFDeviceProx;
 import swingWorkers.worker.CountingWorker;
@@ -7,6 +8,7 @@ import swingWorkers.worker.RFDeviceWorker;
 import swingWorkers.worker.WorkerManager;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
@@ -22,7 +24,7 @@ public class MainFrame extends JFrame {
         initComponents();
         setupLayout();
         setupListeners();
-        initWorkers();
+        startWorkers();
     }
 
     private void initComponents() {
@@ -34,10 +36,11 @@ public class MainFrame extends JFrame {
         outputArea = new JTextArea();
         outputArea.setEditable(false);
 
-        counterButton = new JButton("Start counter");
+        DefaultCaret caret = (DefaultCaret) outputArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
+        counterButton = new JButton("Start counter");
         pauseResumeButton = new JButton("Pause");
-        pauseResumeButton.setEnabled(false);
     }
 
     private void setupLayout() {
@@ -53,56 +56,58 @@ public class MainFrame extends JFrame {
     }
 
     private void setupListeners() {
-        counterButton.addActionListener(e -> startCounter());
-        pauseResumeButton.addActionListener(e -> togglePauseResumeWorkers());
+        counterButton.addActionListener(e -> counterButton());
+        pauseResumeButton.addActionListener(e -> pauseResumeButton());
     }
 
-    private void initWorkers() {
-        outputArea.setText("");
-        pauseResumeButton.setEnabled(true);
-        pauseResumeButton.setText("Pause");
-
+    private void startWorkers() {
         var proxWorker = new RFDeviceWorker(new RFDeviceMech(), workerManager, this::onRFData);
         var mechWorker = new RFDeviceWorker(new RFDeviceProx(), workerManager, this::onRFData);
 
-        workerManager.submit(proxWorker);
-        workerManager.submit(mechWorker);
+        workerManager.submit(proxWorker, false);
+        workerManager.submit(mechWorker, false);
     }
 
-    private void startCounter() {
+    private void counterButton() {
+        outputArea.append("--- Paused ---\n");
+        pauseResumeButton.setText("Pause");
         counterButton.setEnabled(false);
+        pauseResumeButton.setEnabled(false);
 
-        var worker = new CountingWorker(workerManager, this::onCounterData, this::onCounterDone);
-        workerManager.submit(worker);
+        var countWorker = new CountingWorker(workerManager, this::onCounterData, this::onCounterDone);
+        workerManager.submit(countWorker, true);
     }
 
-    private void togglePauseResumeWorkers() {
+    private void pauseResumeButton() {
         if (pauseResumeButton.getText().equals("Pause")) {
-            workerManager.pause();
-            pauseResumeButton.setText("Resume");
+            workerManager.halt();
             outputArea.append("--- Paused ---\n");
+            pauseResumeButton.setText("Resume");
         } else {
             workerManager.resume();
-            pauseResumeButton.setText("Pause");
             outputArea.append("--- Resumed ---\n");
+            pauseResumeButton.setText("Pause");
         }
     }
 
-    private void onRFData(String data) {
-        outputArea.append(data + "\n");
-        workerManager.resume();
-        pauseResumeButton.setText("Pause");
+    private void onRFData(String data, RFDevice device) {
+        switch (device) {
+            case RFDeviceProx prox -> outputArea.append("Prox: " + data + "\n");
+            case RFDeviceMech mech -> outputArea.append("Mech: " + data + "\n");
+        }
         outputArea.append("--- Resumed ---\n");
+        pauseResumeButton.setText("Pause");
     }
 
-    private void onCounterData(String data) {
-        outputArea.append(data + "\n");
+    private void onCounterData(Integer data) {
+        outputArea.append("Counter: " + data + "\n");
     }
 
     private void onCounterDone(boolean success) {
-        if (success) outputArea.append("Successful count to 10!\n");
-        counterButton.setEnabled(true);
-        workerManager.resume();
+        if (success) outputArea.append("Count done!\n");
         outputArea.append("--- Resumed ---\n");
+        pauseResumeButton.setText("Pause");
+        counterButton.setEnabled(true);
+        pauseResumeButton.setEnabled(true);
     }
 }

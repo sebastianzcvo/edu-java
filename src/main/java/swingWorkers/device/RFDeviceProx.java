@@ -1,7 +1,7 @@
 package swingWorkers.device;
 
 public non-sealed class RFDeviceProx implements RFDevice {
-    int cont = 0;
+    int cont = 1;
 
     @Override
     public synchronized boolean connect() {
@@ -15,7 +15,7 @@ public non-sealed class RFDeviceProx implements RFDevice {
 
     @Override
     public synchronized String read() {
-        sleep(3_000);
+        sleep(2_000);
         String data = String.valueOf((int) (Math.random() * 10));
         if (cont++ % 4 == 0) data = "0";
         System.out.println("Prox: " + data);
