@@ -56,8 +56,8 @@ public class Interruptions {
 
     static void handleInterrupt() {
         while (true) {
-            if (Thread.interrupted()) { // Thread.interrupted() do both, checks interrupt state, without resetting it.
-                Thread.currentThread().isInterrupted(); // Thread.currentThread().isInterrupted() checks interrupt state, without resetting it.
+            if (Thread.interrupted()) { // Thread.interrupted() do both, checks interrupt state and clears it.
+                Thread.currentThread().isInterrupted(); // Thread.currentThread().isInterrupted() checks interrupt state, without clearing it.
                 System.out.println("Thread was interrupted and interruption was handled");
                 return;
             }
